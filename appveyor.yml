@@ -3,10 +3,9 @@ os: Visual Studio 2015
 environment:
   LIBSASS_DIR: ..\libsass
   matrix:
-  - Compiler: msvc
-    Config: Release
-  - Compiler: msvc
-    Config: Debug
+  - configuration: Debug
+    skip_tags: true
+  - configuration: Release
 
 cache:
   - C:\Ruby%ruby_version%\lib\ruby\gems
@@ -35,3 +34,15 @@ test: off
 
 artifacts:
   path: bin
+
+deploy:
+  provider: GitHub
+  description: $(APPVEYOR_REPO_COMMIT_MESSAGE_EXTENDED)
+  auth_token:
+    secure: BOqQ0M2RFDXpSbfPEcN3Dmz6pcj1Y4nBKk0k808KhaFPI2Ylvm0ABhfVZ8pIbGnn
+  draft: true
+  prerelease: false
+  on:
+    branch: master
+    appveyor_repo_tag: true        # deploy on tag push only
+    configuration: Release
